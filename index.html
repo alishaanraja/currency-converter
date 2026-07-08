@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Currency Converter</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f7fc;
+            color: #3d444f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .converter-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+            border: 1px solid #e2edf7;
+        }
+        input, select {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #d4e5f7;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            outline: none;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #4b6584;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 90%;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #3b526d;
+        }
+        .result {
+            margin-top: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4b6584;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="converter-card">
+        <h2>🪙 Currency Converter</h2>
+        
+        <input type="number" id="amountInput" placeholder="Enter amount..." value="1">
+        
+        <select id="fromCurrency">
+            <option value="USD">USD - US Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="PKR">PKR - Pakistani Rupee</option>
+        </select>
+
+        <select id="toCurrency">
+            <option value="PKR">PKR - Pakistani Rupee</option>
+            <option value="USD">USD - US Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+        </select>
+
+        <button id="convertBtn">Convert Currency</button>
+
+        <div class="result" id="conversionResult">--</div>
+    </div>
+
+    <script src="converter.js"></script>
+</body>
+</html>
