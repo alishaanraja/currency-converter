@@ -110,8 +110,8 @@
             statusDiv.innerText = "Connecting to market feed...";
             resultDiv.innerText = "--";
 
-            // UPGRADED ENDPOINT: Utilizing distributed architecture node
-            const apiUrl = `https://pages.dev{from.toLowerCase()}.json`;
+            // Fully valid URL targeting a highly stable public API network endpoint
+            const apiUrl = `https://er-api.com{from}`;
 
             fetch(apiUrl)
                 .then(response => {
@@ -119,8 +119,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    const baseCurrencyData = data[from.toLowerCase()];
-                    const targetRate = baseCurrencyData ? baseCurrencyData[to.toLowerCase()] : null;
+                    const targetRate = data.rates[to];
                     
                     if (targetRate) {
                         const convertedAmount = amount * targetRate;
@@ -130,15 +129,15 @@
                         });
 
                         resultDiv.innerText = `${amount} ${from} = ${formattedResult} ${to}`;
-                        statusDiv.innerText = `Rates live as of ${data.date}`;
+                        statusDiv.innerText = `Rates live as of ${new Date(data.time_last_update_utc).toLocaleDateString()}`;
                     } else {
                         throw new Error('Currency mismatched');
                     }
                 })
                 .catch(error => {
-                    console.error("Live fetch failed, initializing fallback array...", error);
+                    console.error("API Error occurred: ", error);
                     
-                    // Backup math engine
+                    // Safe local backup block
                     const fallbackRates = {
                         "USD": 1, "EUR": 0.92, "GBP": 0.78, "PKR": 278.50, "AED": 3.67, "SAR": 3.75
                     };
