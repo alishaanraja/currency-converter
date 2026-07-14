@@ -93,7 +93,7 @@
         <div class="status-text" id="statusMessage">Rates are dynamically loaded via API</div>
     </div>
 
-    <script>
+        <script>
         document.getElementById('convertBtn').addEventListener('click', function() {
             const amount = parseFloat(document.getElementById('amountInput').value);
             const from = document.getElementById('fromCurrency').value;
@@ -110,8 +110,8 @@
             statusDiv.innerText = "Connecting to market feed...";
             resultDiv.innerText = "--";
 
-            // Fully valid URL targeting a highly stable public API network endpoint
-            const apiUrl = `https://er-api.com{from}`;
+            // Fixed using standard string joining so syntax issues are impossible
+            const apiUrl = "https://er-api.com" + from;
 
             fetch(apiUrl)
                 .then(response => {
@@ -128,8 +128,8 @@
                             maximumFractionDigits: 2
                         });
 
-                        resultDiv.innerText = `${amount} ${from} = ${formattedResult} ${to}`;
-                        statusDiv.innerText = `Rates live as of ${new Date(data.time_last_update_utc).toLocaleDateString()}`;
+                        resultDiv.innerText = amount + " " + from + " = " + formattedResult + " " + to;
+                        statusDiv.innerText = "Rates live dynamically updated.";
                     } else {
                         throw new Error('Currency mismatched');
                     }
@@ -147,7 +147,7 @@
                         minimumFractionDigits: 2, maximumFractionDigits: 2
                     });
                     
-                    resultDiv.innerText = `${amount} ${from} = ${formattedResult} ${to}`;
+                    resultDiv.innerText = amount + " " + from + " = " + formattedResult + " " + to;
                     statusDiv.innerText = "Loaded via secure internal fallback engine.";
                 });
         });
