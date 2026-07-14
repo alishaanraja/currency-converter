@@ -33,6 +33,7 @@
             margin-bottom: 15px;
             outline: none;
             font-size: 1rem;
+            box-sizing: border-box;
         }
         button {
             background-color: #4b6584;
@@ -68,13 +69,17 @@
             <option value="EUR">EUR - Euro</option>
             <option value="GBP">GBP - British Pound</option>
             <option value="PKR">PKR - Pakistani Rupee</option>
+            <option value="AED">AED - UAE Dirham</option>
+            <option value="SAR">SAR - Saudi Riyal</option>
         </select>
 
         <select id="toCurrency">
-            <option value="PKR">PKR - Pakistani Rupee</option>
+            <option value="PKR" selected>PKR - Pakistani Rupee</option>
             <option value="USD">USD - US Dollar</option>
             <option value="EUR">EUR - Euro</option>
             <option value="GBP">GBP - British Pound</option>
+            <option value="AED">AED - UAE Dirham</option>
+            <option value="SAR">SAR - Saudi Riyal</option>
         </select>
 
         <button id="convertBtn">Convert Currency</button>
@@ -82,6 +87,37 @@
         <div class="result" id="conversionResult">--</div>
     </div>
 
-    <script src="converter.js"></script>
+    <script>
+        document.getElementById('convertBtn').addEventListener('click', function() {
+            const amount = parseFloat(document.getElementById('amountInput').value);
+            const from = document.getElementById('fromCurrency').value;
+            const to = document.getElementById('toCurrency').value;
+
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            // Precisely mapped current rates relative to 1 USD base
+            const baseRatesInUSD = {
+                "USD": 1,
+                "EUR": 0.88,
+                "GBP": 0.75,
+                "PKR": 279.16,
+                "AED": 3.67,
+                "SAR": 3.75
+            };
+
+            const amountInUSD = amount / baseRatesInUSD[from];
+            const convertedAmount = amountInUSD * baseRatesInUSD[to];
+
+            const formattedResult = convertedAmount.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            document.getElementById('conversionResult').innerText = `${amount} ${from} = ${formattedResult} ${to}`;
+        });
+    </script>
 </body>
 </html>
