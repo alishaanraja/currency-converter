@@ -93,11 +93,11 @@
         <div class="status-text" id="statusMessage">Rates are dynamically loaded via API</div>
     </div>
 
-           <script>
+    <script>
         document.getElementById('convertBtn').addEventListener('click', function() {
             const amount = parseFloat(document.getElementById('amountInput').value);
-            const from = document.getElementById('fromCurrency').value;
-            const to = document.getElementById('toCurrency').value;
+            const fromValue = document.getElementById('fromCurrency').value;
+            const toValue = document.getElementById('toCurrency').value;
             const resultDiv = document.getElementById('conversionResult');
             const statusDiv = document.getElementById('statusMessage');
 
@@ -110,16 +110,18 @@
             statusDiv.innerText = "Connecting to market feed...";
             resultDiv.innerText = "--";
 
-            // FIXED LINE: Clean text addition prevents variables from corrupting the URL path
-            const apiUrl = "https://er-api.com" + from.toUpperCase();
+            // A clean, simple API setup that fixes past URL corruption issues
+            const apiBase = "https://open.er-api.com/v6/latest/";
+            const finalUrl = apiBase.concat(fromValue);
 
-            fetch(apiUrl)
+            fetch(finalUrl)
                 .then(response => {
                     if (!response.ok) throw new Error('Network failure');
                     return response.json();
                 })
                 .then(data => {
-                    const targetRate = data.rates[to.toUpperCase()];
+                    const dynamicRatesMatrix = data.rates;
+                    const targetRate = dynamicRatesMatrix[toValue];
                     
                     if (targetRate) {
                         const convertedAmount = amount * targetRate;
@@ -128,26 +130,26 @@
                             maximumFractionDigits: 2
                         });
 
-                        resultDiv.innerText = amount + " " + from + " = " + formattedResult + " " + to;
+                        resultDiv.innerText = amount + " " + fromValue + " = " + formattedResult + " " + toValue;
                         statusDiv.innerText = "Rates live dynamically updated.";
                     } else {
                         throw new Error('Currency mismatched');
                     }
                 })
                 .catch(error => {
-                    console.error("API Error occurred: ", error);
+                    console.error("API Error trace log: ", error);
                     
-                    // Safe local backup block handles conversions seamlessly if offline
+                    // Secure internal backup matrix handles conversions if API is blocked or offline
                     const fallbackRates = {
                         "USD": 1, "EUR": 0.92, "GBP": 0.78, "PKR": 278.50, "AED": 3.67, "SAR": 3.75
                     };
-                    const amountInUSD = amount / fallbackRates[from.toUpperCase()];
-                    const convertedAmount = amountInUSD * fallbackRates[to.toUpperCase()];
+                    const amountInUSD = amount / fallbackRates[fromValue];
+                    const convertedAmount = amountInUSD * fallbackRates[toValue];
                     const formattedResult = convertedAmount.toLocaleString(undefined, {
                         minimumFractionDigits: 2, maximumFractionDigits: 2
                     });
                     
-                    resultDiv.innerText = amount + " " + from + " = " + formattedResult + " " + to;
+                    resultDiv.innerText = amount + " " + fromValue + " = " + formattedResult + " " + toValue;
                     statusDiv.innerText = "Loaded via secure internal fallback engine.";
                 });
         });
