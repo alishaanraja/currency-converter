@@ -110,7 +110,7 @@
             resultDiv.innerText = "--";
 
             // Switched to a secure public CDN endpoint to completely bypass CORS / connection blocks
-            const apiUrl = `https://jsdelivr.net{from.toLowerCase()}.json`;
+           const apiUrl = `https://pages.dev{from.toLowerCase()}.json`;
 
             fetch(apiUrl)
                 .then(response => {
