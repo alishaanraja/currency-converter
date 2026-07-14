@@ -110,16 +110,17 @@
             statusDiv.innerText = "Connecting to market feed...";
             resultDiv.innerText = "--";
 
-            // FIXED URL: Safely targets a high-availability, completely open global market API node
-            const apiUrl = `https://exchangerate-api.com{from}`;
+            // UPGRADED ENDPOINT: Utilizing distributed architecture node
+            const apiUrl = `https://pages.dev{from.toLowerCase()}.json`;
 
             fetch(apiUrl)
                 .then(response => {
-                    if (!response.ok) throw new Error('Network response failure');
+                    if (!response.ok) throw new Error('Network failure');
                     return response.json();
                 })
                 .then(data => {
-                    const targetRate = data.rates[to];
+                    const baseCurrencyData = data[from.toLowerCase()];
+                    const targetRate = baseCurrencyData ? baseCurrencyData[to.toLowerCase()] : null;
                     
                     if (targetRate) {
                         const convertedAmount = amount * targetRate;
@@ -129,15 +130,15 @@
                         });
 
                         resultDiv.innerText = `${amount} ${from} = ${formattedResult} ${to}`;
-                        statusDiv.innerText = `Rates dynamically updated live.`;
+                        statusDiv.innerText = `Rates live as of ${data.date}`;
                     } else {
-                        throw new Error('Currency code mismatch');
+                        throw new Error('Currency mismatched');
                     }
                 })
                 .catch(error => {
-                    console.error("Live fetch failed, initiating secure fallback math...", error);
+                    console.error("Live fetch failed, initializing fallback array...", error);
                     
-                    // Secure internal backup matrix handles conversions if API is blocked or offline
+                    // Backup math engine
                     const fallbackRates = {
                         "USD": 1, "EUR": 0.92, "GBP": 0.78, "PKR": 278.50, "AED": 3.67, "SAR": 3.75
                     };
